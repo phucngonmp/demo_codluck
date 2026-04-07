@@ -25,5 +25,4 @@ public class RegisterRequest {
             message = "Mật khẩu phải có chữ thường, chữ hoa, số và ký tự đặc biệt"
     )
     private String password;
-    private String otp;
 }

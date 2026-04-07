@@ -1,6 +1,7 @@
 package org.example.demo.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,9 @@ import java.security.SecureRandom;
 public class EmailService {
     @Autowired
     private JavaMailSender javaMailSender;
+
+    @Value("${spring.mail.from:${spring.mail.username:}}")
+    private String fromAddress;
 
     // Phương thức tạo OTP ngẫu nhiên
     public String generateOTP() {
@@ -29,7 +33,7 @@ public class EmailService {
         message.setTo(to);  // Địa chỉ email người nhận
         message.setSubject(subject);
         message.setText(text);
-        message.setFrom("ahmobile17022005@gmail.com");  // Địa chỉ email gửi
+        message.setFrom(fromAddress);
 
         // Gửi email
         javaMailSender.send(message);

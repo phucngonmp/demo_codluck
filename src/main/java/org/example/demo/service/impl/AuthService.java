@@ -16,6 +16,7 @@ import org.example.demo.repositories.UserRepository;
 import org.example.demo.security.UserDetailService;
 import org.example.demo.service.IAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,7 +30,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class AuthService implements IAuthService {
-    private String SIGNER_KEY = "xJTUVPssT2uOmsKKn7dmwi/ZuUg1b8ECkPuoSBYziE4ldzMBtSNkaftz1U372J/e";
+    @Value("${jwt.signerKey:change-this-in-local-properties-change-this-in-local-properties-1234567890abcd}")
+    private String SIGNER_KEY = "change-this-in-local-properties-change-this-in-local-properties-1234567890abcd";
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -49,15 +51,18 @@ public class AuthService implements IAuthService {
             throw new ApiException(ErrorCode.UNAUTHENTICATION);
         }
         User user = userRepository.findByEmail(authenticationRequest.getEmail());
-        UserDetails userDetails = userDetailService.loadUserByUsername(authenticationRequest.getEmail());
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         if (user == null || !passwordEncoder.matches(authenticationRequest.getPassword(), user.getPassword())) {
             throw new ApiException(ErrorCode.UNAUTHENTICATION);
         }
+        if (!user.isVerified()) {
+            throw new MessageError("Account is not verified");
+        }
+        UserDetails userDetails = userDetailService.loadUserByUsername(authenticationRequest.getEmail());
         return AuthenticationResponse.builder()
-                .email(userDetails.getUsername())  // Sử dụng thông tin từ UserDetails
+                .email(userDetails.getUsername())
                 .roleList(userDetails.getAuthorities())
-                .token(generateToken(user))    // Tạo token cho UserDetails
+                .token(generateToken(user))
                 .build();
     }
 
@@ -94,11 +99,10 @@ public class AuthService implements IAuthService {
             throw new MessageError("Email is already in use");
         }
 
-        Otp otp = getValidOtp(registerRequest.getEmail(), registerRequest.getOtp());
-
         User user = new User();
         user.setEmail(registerRequest.getEmail());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        user.setVerified(false);
 
         Set<Role> roles = new HashSet<>();
         Role userRole = roleRepository.findByName("USER");
@@ -106,7 +110,7 @@ public class AuthService implements IAuthService {
         user.setRoleSet(roles);
         userRepository.save(user);
 
-        otpRepository.delete(otp);
+        issueOtp(registerRequest.getEmail());
 
         return RegisterResponse.builder()
                 .email(registerRequest.getEmail())
@@ -115,18 +119,15 @@ public class AuthService implements IAuthService {
 
     @Override
     public String sendOtp(String email) {
-        otpRepository.deleteByEmail(email);
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new MessageError("Account not found");
+        }
+        if (user.isVerified()) {
+            throw new MessageError("Account is already verified");
+        }
 
-        String code = emailService.generateOTP();
-
-        Otp otp = new Otp();
-        otp.setEmail(email);
-        otp.setOtpCode(code);
-        otp.setExpiresAt(LocalDateTime.now().plusMinutes(5));
-        otpRepository.save(otp);
-
-        emailService.sendOTPEmail(email, code);
-
+        issueOtp(email);
         return "OTP sent to your email.";
     }
 
@@ -152,6 +153,11 @@ public class AuthService implements IAuthService {
 
     @Override
     public Boolean verifyOtp(String email, String code) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            return false;
+        }
+
         Optional<Otp> otpOptional = otpRepository.findByEmailAndOtpCode(email, code);
         if (otpOptional.isEmpty()) {
             return false;
@@ -162,6 +168,12 @@ public class AuthService implements IAuthService {
             otpRepository.delete(otp);
             return false;
         }
+
+        if (!user.isVerified()) {
+            user.setVerified(true);
+            userRepository.save(user);
+        }
+        otpRepository.delete(otp);
 
         return true;
     }
@@ -173,19 +185,18 @@ public class AuthService implements IAuthService {
         return "Password changed successfully!";
     }
 
-    private Otp getValidOtp(String email, String code) {
-        Optional<Otp> otpOptional = otpRepository.findByEmailAndOtpCode(email, code);
-        if (otpOptional.isEmpty()) {
-            throw new MessageError("Invalid OTP");
-        }
+    private void issueOtp(String email) {
+        otpRepository.deleteByEmail(email);
 
-        Otp otp = otpOptional.get();
-        if (isExpired(otp)) {
-            otpRepository.delete(otp);
-            throw new MessageError("OTP has expired");
-        }
+        String code = emailService.generateOTP();
 
-        return otp;
+        Otp otp = new Otp();
+        otp.setEmail(email);
+        otp.setOtpCode(code);
+        otp.setExpiresAt(LocalDateTime.now().plusMinutes(5));
+        otpRepository.save(otp);
+
+        emailService.sendOTPEmail(email, code);
     }
 
     private boolean isExpired(Otp otp) {

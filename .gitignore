@@ -3,6 +3,12 @@ target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+.DS_Store
+
+# Local secrets
+.env
+.env.*
+src/main/resources/application-local.properties
 
 ### STS ###
 .apt_generated
