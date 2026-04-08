@@ -14,15 +14,15 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterRequest {
-    @NotBlank(message = "Email không được để trống")
-    @Email(message = "Email không đúng định dạng")
-    @Size(max = 100, message = "Email không được vượt quá 100 ký tự")
+    @NotBlank(message = "validation.email.notBlank")
+    @Email(message = "validation.email.invalid")
+    @Size(max = 100, message = "validation.email.maxSize")
     private String email;
-    @NotBlank(message = "Mật khẩu không được để trống")
-    @Size(min = 8, max = 32, message = "Mật khẩu phải từ 8 đến 32 ký tự")
+    @NotBlank(message = "validation.password.notBlank")
+    @Size(min = 8, max = 32, message = "validation.password.size")
     @Pattern(
             regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&._-])[A-Za-z\\d@$!%*?&._-]{8,32}$",
-            message = "Mật khẩu phải có chữ thường, chữ hoa, số và ký tự đặc biệt"
+            message = "validation.password.pattern"
     )
     private String password;
 }

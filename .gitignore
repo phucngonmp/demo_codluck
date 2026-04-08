@@ -8,6 +8,8 @@ target/
 # Local secrets
 .env
 .env.*
+logs/
+*.log
 src/main/resources/application-local.properties
 
 ### STS ###

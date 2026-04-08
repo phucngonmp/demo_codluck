@@ -1,5 +1,6 @@
 package org.example.demo.service.impl;
 
+import org.example.demo.service.II18nService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -12,6 +13,8 @@ import java.security.SecureRandom;
 public class EmailService {
     @Autowired
     private JavaMailSender javaMailSender;
+    @Autowired
+    private II18nService i18nService;
 
     @Value("${spring.mail.from:${spring.mail.username:}}")
     private String fromAddress;
@@ -25,17 +28,15 @@ public class EmailService {
 
     // Phương thức gửi OTP qua email
     public void sendOTPEmail(String to, String code) {
-        // Tạo email đơn giản
-        String subject = "Your OTP Code";
-        String text = "Your OTP code is: " + code;
+        String subject = i18nService.getMessage("email.otp.subject");
+        String text = i18nService.getMessage("email.otp.body", code);
 
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);  // Địa chỉ email người nhận
+        message.setTo(to);
         message.setSubject(subject);
         message.setText(text);
         message.setFrom(fromAddress);
 
-        // Gửi email
         javaMailSender.send(message);
     }
 

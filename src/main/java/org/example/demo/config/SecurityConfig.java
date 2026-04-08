@@ -32,6 +32,9 @@ public class SecurityConfig {
             request
                     .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Cho phép tất cả các yêu cầu OPTIONS
                     .requestMatchers("/auth/**").permitAll()
+                    .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/data-tables/**").permitAll()
+                    .requestMatchers("/api/admin/**").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.GET, "/packages/**").permitAll() // 👈 cho phép public
                     .requestMatchers(HttpMethod.GET, "/ratings/**").permitAll() // 👈 cho phép public
                     .anyRequest().authenticated(); // nhưng request còn lại phải được xác thực

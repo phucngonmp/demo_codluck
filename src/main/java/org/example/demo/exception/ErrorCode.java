@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
-    UNAUTHENTICATION (401, "username or password is incorrect!", HttpStatus.UNAUTHORIZED);
+    UNAUTHENTICATION (401, "auth.error.unauthenticated", HttpStatus.UNAUTHORIZED);
     Integer code;
-    String message;
+    String messageKey;
     HttpStatus status;
 }

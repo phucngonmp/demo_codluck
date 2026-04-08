@@ -1,0 +1,49 @@
+{
+  "common": {
+    "success": "Thành công",
+    "error": {
+      "invalidRequest": "Yêu cầu không hợp lệ",
+      "methodNotAllowed": "Phương thức không được hỗ trợ",
+      "internalServer": "Lỗi máy chủ nội bộ",
+      "accessDenied": "Bạn không có quyền truy cập"
+    }
+  },
+  "auth": {
+    "error": {
+      "unauthenticated": "Tên đăng nhập hoặc mật khẩu không chính xác!",
+      "accountNotVerified": "Tài khoản chưa được xác minh",
+      "emailInUse": "Email đã được sử dụng",
+      "accountNotFound": "Không tìm thấy tài khoản",
+      "accountAlreadyVerified": "Tài khoản đã được xác minh",
+      "emailNotFound": "Không tìm thấy email!",
+      "userNotFound": "Không tìm thấy người dùng với email: {0}"
+    },
+    "success": {
+      "otpSent": "OTP đã được gửi tới email của bạn.",
+      "passwordResetOtpSent": "OTP đã được gửi tới email của bạn. Vui lòng xác minh để đặt lại mật khẩu.",
+      "passwordChanged": "Đổi mật khẩu thành công!"
+    }
+  },
+  "admin": {
+    "accessGranted": "Đã cấp quyền truy cập admin",
+    "pong": "pong"
+  },
+  "email": {
+    "otp": {
+      "subject": "Mã OTP của bạn",
+      "body": "Mã OTP của bạn là: {0}"
+    }
+  },
+  "validation": {
+    "email": {
+      "notBlank": "Email không được để trống",
+      "invalid": "Email không đúng định dạng",
+      "maxSize": "Email không được vượt quá 100 ký tự"
+    },
+    "password": {
+      "notBlank": "Mật khẩu không được để trống",
+      "size": "Mật khẩu phải từ 8 đến 32 ký tự",
+      "pattern": "Mật khẩu phải có chữ thường, chữ hoa, số và ký tự đặc biệt"
+    }
+  }
+}

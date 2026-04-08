@@ -7,7 +7,7 @@ public class ApiException extends RuntimeException{
     ErrorCode errorCode;
 
     public ApiException(ErrorCode errorCode) {
-        super(errorCode.getMessage());
+        super(errorCode.getMessageKey());
         this.errorCode = errorCode;
     }
 }

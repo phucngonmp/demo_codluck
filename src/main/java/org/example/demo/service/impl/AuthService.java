@@ -15,6 +15,7 @@ import org.example.demo.repositories.RoleRepository;
 import org.example.demo.repositories.UserRepository;
 import org.example.demo.security.UserDetailService;
 import org.example.demo.service.IAuthService;
+import org.example.demo.service.II18nService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,6 +44,8 @@ public class AuthService implements IAuthService {
     private RoleRepository roleRepository;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private II18nService i18nService;
 
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
@@ -57,7 +60,7 @@ public class AuthService implements IAuthService {
             throw new ApiException(ErrorCode.UNAUTHENTICATION);
         }
         if (!user.isVerified()) {
-            throw new MessageError("Account is not verified");
+            throw new MessageError("auth.error.accountNotVerified");
         }
         UserDetails userDetails = userDetailService.loadUserByUsername(authenticationRequest.getEmail());
         return AuthenticationResponse.builder()
@@ -98,7 +101,7 @@ public class AuthService implements IAuthService {
     @Transactional
     public RegisterResponse register(RegisterRequest registerRequest) {
         if (userRepository.findByEmail(registerRequest.getEmail()) != null) {
-            throw new MessageError("Email is already in use");
+            throw new MessageError("auth.error.emailInUse");
         }
 
         User user = new User();
@@ -124,21 +127,21 @@ public class AuthService implements IAuthService {
     public String sendOtp(String email) {
         User user = userRepository.findByEmail(email);
         if (user == null) {
-            throw new MessageError("Account not found");
+            throw new MessageError("auth.error.accountNotFound");
         }
         if (user.isVerified()) {
-            throw new MessageError("Account is already verified");
+            throw new MessageError("auth.error.accountAlreadyVerified");
         }
 
         issueOtp(email);
-        return "OTP sent to your email.";
+        return i18nService.getMessage("auth.success.otpSent");
     }
 
     @Transactional
     public String requestPasswordReset(String email) {
         User user = userRepository.findByEmail(email);
         if (user == null) {
-            return "Email not found!";
+            return i18nService.getMessage("auth.error.emailNotFound");
         }
 
         otpRepository.deleteByEmail(email);
@@ -152,7 +155,7 @@ public class AuthService implements IAuthService {
         otp.setExpiresAt(LocalDateTime.now().plusMinutes(5));
         otpRepository.save(otp);
 
-        return "OTP sent to your email. Please verify to reset your password.";
+        return i18nService.getMessage("auth.success.passwordResetOtpSent");
     }
 
     @Override
@@ -188,7 +191,7 @@ public class AuthService implements IAuthService {
         User user = userRepository.findByEmail(requestPasswordReset.getEmail());
         user.setPassword(passwordEncoder.encode(requestPasswordReset.getPassword()));
         userRepository.save(user);
-        return "Password changed successfully!";
+        return i18nService.getMessage("auth.success.passwordChanged");
     }
 
     private void issueOtp(String email) {

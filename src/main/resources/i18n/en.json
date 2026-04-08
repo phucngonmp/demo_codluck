@@ -1,0 +1,49 @@
+{
+  "common": {
+    "success": "Success",
+    "error": {
+      "invalidRequest": "Invalid request",
+      "methodNotAllowed": "Method not allowed",
+      "internalServer": "Internal server error",
+      "accessDenied": "Access denied"
+    }
+  },
+  "auth": {
+    "error": {
+      "unauthenticated": "Username or password is incorrect!",
+      "accountNotVerified": "Account is not verified",
+      "emailInUse": "Email is already in use",
+      "accountNotFound": "Account not found",
+      "accountAlreadyVerified": "Account is already verified",
+      "emailNotFound": "Email not found!",
+      "userNotFound": "User not found with email: {0}"
+    },
+    "success": {
+      "otpSent": "OTP sent to your email.",
+      "passwordResetOtpSent": "OTP sent to your email. Please verify to reset your password.",
+      "passwordChanged": "Password changed successfully!"
+    }
+  },
+  "admin": {
+    "accessGranted": "Admin access granted",
+    "pong": "pong"
+  },
+  "email": {
+    "otp": {
+      "subject": "Your OTP Code",
+      "body": "Your OTP code is: {0}"
+    }
+  },
+  "validation": {
+    "email": {
+      "notBlank": "Email must not be blank",
+      "invalid": "Invalid email format",
+      "maxSize": "Email must not exceed 100 characters"
+    },
+    "password": {
+      "notBlank": "Password must not be blank",
+      "size": "Password must be between 8 and 32 characters",
+      "pattern": "Password must contain lowercase, uppercase, number and special character"
+    }
+  }
+}

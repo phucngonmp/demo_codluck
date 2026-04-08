@@ -1,14 +1,19 @@
 package org.example.demo.exception;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
 public class MessageError extends RuntimeException{
-    private String message;
+    private String messageKey;
+    private Object[] args;
+
+    public MessageError(String messageKey, Object... args) {
+        super(messageKey);
+        this.messageKey = messageKey;
+        this.args = args;
+    }
 }
