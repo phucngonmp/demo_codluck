@@ -1,66 +1,66 @@
 package org.example.demo.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.demo.common.ErrorCode;
-import org.example.demo.common.Role;
 import org.example.demo.dto.AccountDTO;
-import org.example.demo.dto.request.SignupRequest;
+import org.example.demo.dto.request.RegisterRequest;
 import org.example.demo.entities.Account;
-import org.example.demo.exception.AppException;
+import org.example.demo.entities.Role;
+import org.example.demo.exception.ClientException;
 import org.example.demo.mappers.AccountMapper;
 import org.example.demo.repositories.AccountRepository;
+import org.example.demo.repositories.RoleRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
+@Slf4j
 public class AccountService {
     private final AccountRepository accountRepository;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final AccountMapper accountMapper;
 
-    public AccountService(AccountRepository accountRepository, PasswordEncoder passwordEncoder, AccountMapper accountMapper) {
+    public AccountService(AccountRepository accountRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, AccountMapper accountMapper) {
         this.accountRepository = accountRepository;
+        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.accountMapper = accountMapper;
     }
 
-    public AccountDTO createAccount(SignupRequest signupRequest) {
-        if(!signupRequest.password().equals(signupRequest.confirmPassword())) {
-            throw new AppException(ErrorCode.PASSWORD_MISMATCH);
+    public AccountDTO createAccount(RegisterRequest registerRequest) {
+        if(!registerRequest.password().equals(registerRequest.confirmPassword())) {
+            throw new ClientException(ErrorCode.PASSWORD_MISMATCH);
         }
-        if (isUsernameExists(signupRequest.username())) {
-            throw new AppException(ErrorCode.USERNAME_EXISTED);
+        if (isUsernameExists(registerRequest.username())) {
+            throw new ClientException(ErrorCode.USERNAME_EXISTED);
         }
-        if(isEmailExists(signupRequest.email())) {
-            throw new AppException(ErrorCode.EMAIL_EXISTED);
+        if(isEmailExists(registerRequest.email())) {
+            throw new ClientException(ErrorCode.EMAIL_EXISTED);
         }
         Account account = Account.builder()
-                .username(signupRequest.username())
-                .password(passwordEncoder.encode(signupRequest.password()))
-                .email(signupRequest.email())
-                .role(Role.USER)
+                .username(registerRequest.username())
+                .password(passwordEncoder.encode(registerRequest.password()))
+                .email(registerRequest.email())
+                .roles(List.of(getOrCreateRole("USER")))
                 .build();
         return accountMapper.toDTO(accountRepository.save(account));
     }
 
-    /**
-     * Resolve a login identifier (username or email) to username.
-     * Throws {@link AppException} if no user exists.
-     */
     public String resolveUsernameByIdentifier(String identifier) {
         if (identifier == null || identifier.isBlank()) {
-            throw new AppException(ErrorCode.BAD_CREDENTIALS);
+            throw new ClientException(ErrorCode.BAD_CREDENTIALS);
         }
-
         if (isEmail(identifier)) {
             Account account = accountRepository.findByEmail(identifier)
-                    .orElseThrow(() -> new AppException(ErrorCode.BAD_CREDENTIALS));
+                    .orElseThrow(() -> new ClientException(ErrorCode.BAD_CREDENTIALS));
             return account.getUsername();
         }
-
-        // username path (do not leak existence via different error)
         return accountRepository.findByUsername(identifier)
                 .map(Account::getUsername)
-                .orElseThrow(() -> new AppException(ErrorCode.BAD_CREDENTIALS));
+                .orElseThrow(() -> new ClientException(ErrorCode.BAD_CREDENTIALS));
     }
 
     private boolean isUsernameExists(String username) {
@@ -72,6 +72,11 @@ public class AccountService {
 
     private boolean isEmail(String email) {
         return email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
+    }
+
+    private Role getOrCreateRole(String roleName) {
+        return roleRepository.findByName(roleName)
+                .orElseGet(() -> roleRepository.save(Role.builder().name(roleName).build()));
     }
 
 }

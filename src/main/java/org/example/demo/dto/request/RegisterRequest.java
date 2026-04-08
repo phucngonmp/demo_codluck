@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
-public record SignupRequest(
+public record RegisterRequest(
         @NotBlank(message = "tên tài khoản không được để trống")
         String username,
 

@@ -19,12 +19,11 @@ public class ApiResponse<T> {
     String message;
 
     // Thành công với dữ liệu
-    public static <T> ApiResponse<T> success(T data, String message) {
+    public static <T> ApiResponse<T> success(T data) {
         ApiResponse<T> response = new ApiResponse<>();
         response.setSuccess(true);
         response.setCode(200);
         response.setData(data);
-        response.setMessage(message);
         return response;
     }
     // Thành công với message

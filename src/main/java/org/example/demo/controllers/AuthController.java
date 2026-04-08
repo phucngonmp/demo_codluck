@@ -5,8 +5,10 @@ import org.example.demo.common.ApiResponse;
 import org.example.demo.common.ErrorCode;
 import org.example.demo.dto.AccountDTO;
 import org.example.demo.dto.request.LoginRequest;
-import org.example.demo.dto.request.SignupRequest;
+import org.example.demo.dto.request.RegisterRequest;
 import org.example.demo.dto.response.AuthResponse;
+import org.example.demo.entities.Role;
+import org.example.demo.exception.ClientException;
 import org.example.demo.security.CustomUserDetails;
 import org.example.demo.security.jwt.JwtUtil;
 import org.example.demo.services.AccountService;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/auth")
@@ -55,20 +59,23 @@ public class AuthController {
             AccountDTO accountDTO = new AccountDTO(
                     userDetails.getUsername(),
                     userDetails.getAccount().getEmail(),
-                    userDetails.getAccount().getRole()
+                    userDetails.getAccount().getRoles()
+                            .stream()
+                            .map(Role::getName)
+                            .collect(Collectors.toList())
             );
 
-            return ApiResponse.success(new AuthResponse(accessToken, accountDTO), "login successfully");
+            return ApiResponse.success(new AuthResponse(accessToken, accountDTO));
         } catch (BadCredentialsException ex) {
-            throw new AppException(ErrorCode.BAD_CREDENTIALS);
+            throw new ClientException(ErrorCode.BAD_CREDENTIALS);
         }
     }
-    @PostMapping("/signup")
-    public ApiResponse<AuthResponse> signup(@RequestBody @Valid SignupRequest signupRequest) {
-        AccountDTO accountDTO = accountService.createAccount(signupRequest);
+    @PostMapping("/register")
+    public ApiResponse<AuthResponse> signup(@RequestBody @Valid RegisterRequest registerRequest) {
+        AccountDTO accountDTO = accountService.createAccount(registerRequest);
         CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(accountDTO.username());
         String accessToken = jwtUtil.generateAccessToken(userDetails);
-        return ApiResponse.success(new AuthResponse(accessToken, accountDTO), "create account successfully");
+        return ApiResponse.success(new AuthResponse(accessToken, accountDTO));
     }
 
 }
