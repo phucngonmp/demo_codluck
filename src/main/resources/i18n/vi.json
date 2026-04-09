@@ -8,6 +8,16 @@
       "accessDenied": "Bạn không có quyền truy cập"
     }
   },
+  "export": {
+    "success": {
+      "started": "Đang xuất file, vui lòng chờ."
+    },
+    "error": {
+      "jobNotFound": "Không tìm thấy tiến trình export",
+      "fileNotReady": "File export chưa sẵn sàng",
+      "fileMissing": "File export không còn tồn tại trên server"
+    }
+  },
   "auth": {
     "error": {
       "unauthenticated": "Tên đăng nhập hoặc mật khẩu không chính xác!",
@@ -44,6 +54,9 @@
       "notBlank": "Mật khẩu không được để trống",
       "size": "Mật khẩu phải từ 8 đến 32 ký tự",
       "pattern": "Mật khẩu phải có chữ thường, chữ hoa, số và ký tự đặc biệt"
+    },
+    "export": {
+      "format": "Định dạng export chỉ được là CSV hoặc PDF"
     }
   }
 }

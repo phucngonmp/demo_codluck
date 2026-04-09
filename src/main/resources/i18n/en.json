@@ -8,6 +8,16 @@
       "accessDenied": "Access denied"
     }
   },
+  "export": {
+    "success": {
+      "started": "Export started. Please wait."
+    },
+    "error": {
+      "jobNotFound": "Export job not found",
+      "fileNotReady": "Export file is not ready yet",
+      "fileMissing": "Export file does not exist on server"
+    }
+  },
   "auth": {
     "error": {
       "unauthenticated": "Username or password is incorrect!",
@@ -44,6 +54,9 @@
       "notBlank": "Password must not be blank",
       "size": "Password must be between 8 and 32 characters",
       "pattern": "Password must contain lowercase, uppercase, number and special character"
+    },
+    "export": {
+      "format": "Export format must be CSV or PDF"
     }
   }
 }
