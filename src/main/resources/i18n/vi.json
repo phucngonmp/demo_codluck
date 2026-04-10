@@ -1,0 +1,91 @@
+{
+  "common": {
+    "error": {
+      "validation": "Dữ liệu không hợp lệ."
+    }
+  },
+  "binding": {
+    "page": {
+      "invalid": "Trang phải là số nguyên."
+    },
+    "size": {
+      "invalid": "Kích thước trang phải là số nguyên."
+    },
+    "typeMismatch": {
+      "integer": "{0} phải là số nguyên.",
+      "long": "{0} phải là số nguyên.",
+      "boolean": "{0} phải là true hoặc false.",
+      "number": "{0} phải là số hợp lệ.",
+      "default": "{0} có giá trị không hợp lệ."
+    }
+  },
+  "security": {
+    "token": {
+      "null": "Token không được để trống.",
+      "invalid": "Token không hợp lệ."
+    }
+  },
+  "auth": {
+    "login": {
+      "badCredentials": "Sai tên đăng nhập, email hoặc mật khẩu."
+    },
+    "register": {
+      "emailExisted": "Email đã tồn tại.",
+      "usernameExisted": "Tên đăng nhập đã tồn tại.",
+      "passwordMismatch": "Mật khẩu xác nhận không khớp."
+    },
+    "user": {
+      "usernameNotFound": "Tên đăng nhập không tồn tại."
+    }
+  },
+  "admin": {
+    "status": {
+      "ready": "API quản trị đang hoạt động."
+    }
+  },
+  "product": {
+    "seed": {
+      "name": "Sản phẩm {0} - {1}",
+      "description": "Mô tả chi tiết cho sản phẩm số {0}. Đây là dữ liệu giả lập.",
+      "success": "Đã tạo dữ liệu sản phẩm mẫu thành công."
+    }
+  },
+  "validation": {
+    "login": {
+      "identifier": {
+        "required": "Tên đăng nhập hoặc email không được để trống."
+      },
+      "password": {
+        "required": "Mật khẩu không được để trống."
+      }
+    },
+    "register": {
+      "username": {
+        "required": "Tên tài khoản không được để trống."
+      },
+      "email": {
+        "required": "Email không được để trống.",
+        "invalid": "Email không hợp lệ."
+      },
+      "password": {
+        "required": "Mật khẩu không được để trống.",
+        "pattern": "Mật khẩu phải chứa ít nhất 1 số và 1 ký tự đặc biệt."
+      },
+      "confirmPassword": {
+        "required": "Vui lòng nhập lại mật khẩu."
+      }
+    },
+    "product": {
+      "page": {
+        "min": "Trang phải lớn hơn hoặc bằng 0."
+      },
+      "size": {
+        "min": "Kích thước trang phải lớn hơn hoặc bằng 1.",
+        "max": "Kích thước trang phải nhỏ hơn hoặc bằng 100."
+      },
+      "sort": {
+        "invalid": "Định dạng sắp xếp không hợp lệ. Ví dụ: 'name,asc' hoặc 'price,desc'."
+      }
+    }
+  }
+}

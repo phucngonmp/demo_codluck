@@ -18,7 +18,6 @@ public class ApiResponse<T> {
     Object errors;
     String message;
 
-    // Thành công với dữ liệu
     public static <T> ApiResponse<T> success(T data) {
         ApiResponse<T> response = new ApiResponse<>();
         response.setSuccess(true);
@@ -26,7 +25,7 @@ public class ApiResponse<T> {
         response.setData(data);
         return response;
     }
-    // Thành công với message
+
     public static <T> ApiResponse<T> success(String message) {
         ApiResponse<T> response = new ApiResponse<>();
         response.setSuccess(true);
@@ -34,25 +33,23 @@ public class ApiResponse<T> {
         response.setMessage(message);
         return response;
     }
-    // Thất bại với thông điệp lỗi và mã lỗi tùy chỉnh
-    public static <T> ApiResponse<T> error(ErrorCode errorCode) {
+
+    public static <T> ApiResponse<T> error(ErrorCode errorCode, String message) {
         ApiResponse<T> response = new ApiResponse<>();
         response.setSuccess(false);
         response.setCode(errorCode.getCode());
         response.setData(null);
-        response.setMessage(errorCode.getMessage());
+        response.setMessage(message);
         return response;
     }
-    // Error with details
-    public static <T> ApiResponse<T> error(ErrorCode errorCode, Object errors) {
+
+    public static <T> ApiResponse<T> error(ErrorCode errorCode, String message, Object errors) {
         return ApiResponse.<T>builder()
                 .success(false)
                 .code(errorCode.getCode())
                 .data(null)
-                .message(errorCode.getMessage())
+                .message(message)
                 .errors(errors)
                 .build();
     }
 }
-
-

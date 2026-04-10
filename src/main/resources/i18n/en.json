@@ -1,0 +1,91 @@
+{
+  "common": {
+    "error": {
+      "validation": "Validation failed."
+    }
+  },
+  "binding": {
+    "page": {
+      "invalid": "Page must be an integer."
+    },
+    "size": {
+      "invalid": "Size must be an integer."
+    },
+    "typeMismatch": {
+      "integer": "{0} must be an integer.",
+      "long": "{0} must be a whole number.",
+      "boolean": "{0} must be true or false.",
+      "number": "{0} must be a valid number.",
+      "default": "{0} has an invalid value."
+    }
+  },
+  "security": {
+    "token": {
+      "null": "Token is required.",
+      "invalid": "Token is invalid."
+    }
+  },
+  "auth": {
+    "login": {
+      "badCredentials": "Incorrect username, email, or password."
+    },
+    "register": {
+      "emailExisted": "Email already exists.",
+      "usernameExisted": "Username already exists.",
+      "passwordMismatch": "Password confirmation does not match."
+    },
+    "user": {
+      "usernameNotFound": "Username does not exist."
+    }
+  },
+  "admin": {
+    "status": {
+      "ready": "Admin API is working."
+    }
+  },
+  "product": {
+    "seed": {
+      "name": "Product {0} - {1}",
+      "description": "Detailed description for product #{0}. This is sample data.",
+      "success": "Sample products created successfully."
+    }
+  },
+  "validation": {
+    "login": {
+      "identifier": {
+        "required": "Identifier is required."
+      },
+      "password": {
+        "required": "Password is required."
+      }
+    },
+    "register": {
+      "username": {
+        "required": "Username is required."
+      },
+      "email": {
+        "required": "Email is required.",
+        "invalid": "Email is not valid."
+      },
+      "password": {
+        "required": "Password is required.",
+        "pattern": "Password must contain at least one digit and one special character."
+      },
+      "confirmPassword": {
+        "required": "Please confirm your password."
+      }
+    },
+    "product": {
+      "page": {
+        "min": "Page must be greater than or equal to 0."
+      },
+      "size": {
+        "min": "Size must be greater than or equal to 1.",
+        "max": "Size must be less than or equal to 100."
+      },
+      "sort": {
+        "invalid": "Sort format is invalid. Example: 'name,asc' or 'price,desc'."
+      }
+    }
+  }
+}

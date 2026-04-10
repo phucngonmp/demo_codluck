@@ -5,20 +5,21 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
 public record RegisterRequest(
-        @NotBlank(message = "tên tài khoản không được để trống")
+        @NotBlank(message = "{validation.register.username.required}")
         String username,
 
-        @Email(message = "email không hợp lệ")
+        @NotBlank(message = "{validation.register.email.required}")
+        @Email(message = "{validation.register.email.invalid}")
         String email,
 
-        @NotBlank(message = "Mật khẩu không được để trống")
+        @NotBlank(message = "{validation.register.password.required}")
         @Pattern(
                 regexp = "^(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?])(?=.*\\d).+$",
-                message = "Mật khẩu phải chứa ít nhất 1 số và 1 ký tự đặc biệt"
+                message = "{validation.register.password.pattern}"
         )
         String password,
 
-        @NotBlank(message = "Vui lòng nhập lại mật khẩu")
+        @NotBlank(message = "{validation.register.confirmPassword.required}")
         String confirmPassword
 ) {
 }
