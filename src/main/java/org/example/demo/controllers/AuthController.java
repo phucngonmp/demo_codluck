@@ -11,11 +11,10 @@ import org.example.demo.entities.Role;
 import org.example.demo.exception.ClientException;
 import org.example.demo.security.CustomUserDetails;
 import org.example.demo.security.jwt.JwtUtil;
-import org.example.demo.services.AccountService;
+import org.example.demo.services.IAccountService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.example.demo.exception.AppException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,12 +27,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final AccountService accountService;
+    private final IAccountService accountService;
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
     private final AuthenticationManager authenticationManager;
 
-    AuthController(AccountService accountService,
+    AuthController(IAccountService accountService,
                    JwtUtil jwtUtil,
                    UserDetailsService userDetailsService,
                    AuthenticationManager authenticationManager) {

@@ -28,7 +28,7 @@ public record ProductQueryRequest(
             size = 10;
         }
         if (sort == null) {
-            sort = "createdAt,desc";
+            sort = "id,desc";
         }
     }
 }

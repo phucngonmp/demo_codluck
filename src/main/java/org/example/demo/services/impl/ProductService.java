@@ -1,4 +1,4 @@
-package org.example.demo.services;
+package org.example.demo.services.impl;
 
 import jakarta.validation.Valid;
 import org.example.demo.dto.ProductDTO;
@@ -8,11 +8,10 @@ import org.example.demo.entities.Product;
 import org.example.demo.i18n.Translator;
 import org.example.demo.mappers.ProductMapper;
 import org.example.demo.repositories.ProductRepository;
+import org.example.demo.services.IProductService;
+import org.example.demo.support.ProductQuerySupport;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -22,35 +21,30 @@ import java.util.List;
 import java.util.Random;
 
 @Service
-public class ProductService {
+public class ProductService implements IProductService {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final ProductQuerySupport productQuerySupport;
     private final Translator translator;
 
-    public ProductService(ProductRepository productRepository, ProductMapper productMapper, Translator translator) {
+    public ProductService(
+            ProductRepository productRepository,
+            ProductMapper productMapper,
+            ProductQuerySupport productQuerySupport,
+            Translator translator
+    ) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;
+        this.productQuerySupport = productQuerySupport;
         this.translator = translator;
     }
 
+    @Override
     public ProductPageResponse getProductPage(@Valid ProductQueryRequest request) {
-        String[] sortParts = request.sort().split(",");
-        String sortBy = sortParts[0];
-        Sort.Direction sortDirection = sortParts[1].equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Pageable pageable = productQuerySupport.buildPageable(request);
 
-        Pageable pageable = PageRequest.of(request.page(), request.size(), Sort.by(sortDirection, sortBy));
-
-        Specification<Product> spec = (root, query, cb) -> {
-            if (request.search() == null || request.search().isEmpty()) {
-                return cb.conjunction();
-            }
-
-            String searchPattern = "%" + request.search().toLowerCase() + "%";
-            return cb.like(cb.lower(root.get("name")), searchPattern);
-        };
-
-        Page<Product> productPage = productRepository.findAll(spec, pageable);
+        Page<Product> productPage = productRepository.findAll(productQuerySupport.buildSpecification(request), pageable);
 
         List<ProductDTO> content = productPage.getContent().stream()
                 .map(productMapper::toDTO)
@@ -59,6 +53,7 @@ public class ProductService {
         return toResponse(productPage, content);
     }
 
+    @Override
     public String fakeData() {
         Random random = new Random();
         List<Product> products = new ArrayList<>();

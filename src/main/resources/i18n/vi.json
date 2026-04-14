@@ -1,90 +1,114 @@
 {
+  "method": {
+    "not": {
+      "allowed": "Phuong thuc khong ho tro."
+    }
+  },
   "common": {
     "error": {
-      "validation": "Dữ liệu không hợp lệ."
+      "validation": "Du lieu khong hop le."
     }
   },
   "binding": {
     "page": {
-      "invalid": "Trang phải là số nguyên."
+      "invalid": "Trang phai la so nguyen."
     },
     "size": {
-      "invalid": "Kích thước trang phải là số nguyên."
+      "invalid": "Kich thuoc trang phai la so nguyen."
     },
     "typeMismatch": {
-      "integer": "{0} phải là số nguyên.",
-      "long": "{0} phải là số nguyên.",
-      "boolean": "{0} phải là true hoặc false.",
-      "number": "{0} phải là số hợp lệ.",
-      "default": "{0} có giá trị không hợp lệ."
+      "integer": "{0} phai la so nguyen.",
+      "long": "{0} phai la so nguyen.",
+      "boolean": "{0} phai la true hoac false.",
+      "number": "{0} phai la so hop le.",
+      "default": "{0} co gia tri khong hop le."
     }
   },
   "security": {
+    "unauthorized": "Ban can dang nhap de truy cap tai nguyen nay.",
+    "forbidden": "Ban khong co quyen truy cap tai nguyen nay.",
     "token": {
-      "null": "Token không được để trống.",
-      "invalid": "Token không hợp lệ."
+      "null": "Token khong duoc de trong.",
+      "invalid": "Token khong hop le."
     }
   },
   "auth": {
     "login": {
-      "badCredentials": "Sai tên đăng nhập, email hoặc mật khẩu."
+      "badCredentials": "Sai ten dang nhap, email hoac mat khau."
     },
     "register": {
-      "emailExisted": "Email đã tồn tại.",
-      "usernameExisted": "Tên đăng nhập đã tồn tại.",
-      "passwordMismatch": "Mật khẩu xác nhận không khớp."
+      "emailExisted": "Email da ton tai.",
+      "usernameExisted": "Ten dang nhap da ton tai.",
+      "passwordMismatch": "Mat khau xac nhan khong khop."
     },
     "user": {
-      "usernameNotFound": "Tên đăng nhập không tồn tại."
+      "usernameNotFound": "Ten dang nhap khong ton tai."
+    }
+  },
+  "export": {
+    "job": {
+      "processing": "Dang xuat file, vui long cho.",
+      "notFound": "Khong tim thay yeu cau xuat file.",
+      "notReady": "File xuat chua san sang de tai xuong.",
+      "accessDenied": "Ban khong co quyen truy cap yeu cau xuat file nay."
     }
   },
   "admin": {
     "status": {
-      "ready": "API quản trị đang hoạt động."
+      "ready": "API quan tri dang hoat dong."
     }
   },
   "product": {
     "seed": {
-      "name": "Sản phẩm {0} - {1}",
-      "description": "Mô tả chi tiết cho sản phẩm số {0}. Đây là dữ liệu giả lập.",
-      "success": "Đã tạo dữ liệu sản phẩm mẫu thành công."
+      "name": "San pham {0} - {1}",
+      "description": "Mo ta chi tiet cho san pham so {0}. Day la du lieu gia lap.",
+      "success": "Da tao du lieu san pham mau thanh cong."
     }
   },
   "validation": {
     "login": {
       "identifier": {
-        "required": "Tên đăng nhập hoặc email không được để trống."
+        "required": "Ten dang nhap hoac email khong duoc de trong."
       },
       "password": {
-        "required": "Mật khẩu không được để trống."
+        "required": "Mat khau khong duoc de trong."
       }
     },
     "register": {
       "username": {
-        "required": "Tên tài khoản không được để trống."
+        "required": "Ten tai khoan khong duoc de trong."
       },
       "email": {
-        "required": "Email không được để trống.",
-        "invalid": "Email không hợp lệ."
+        "required": "Email khong duoc de trong.",
+        "invalid": "Email khong hop le."
       },
       "password": {
-        "required": "Mật khẩu không được để trống.",
-        "pattern": "Mật khẩu phải chứa ít nhất 1 số và 1 ký tự đặc biệt."
+        "required": "Mat khau khong duoc de trong.",
+        "pattern": "Mat khau phai chua it nhat 1 so va 1 ky tu dac biet."
       },
       "confirmPassword": {
-        "required": "Vui lòng nhập lại mật khẩu."
+        "required": "Vui long nhap lai mat khau."
       }
     },
     "product": {
       "page": {
-        "min": "Trang phải lớn hơn hoặc bằng 0."
+        "min": "Trang phai lon hon hoac bang 0."
       },
       "size": {
-        "min": "Kích thước trang phải lớn hơn hoặc bằng 1.",
-        "max": "Kích thước trang phải nhỏ hơn hoặc bằng 100."
+        "min": "Kich thuoc trang phai lon hon hoac bang 1.",
+        "max": "Kich thuoc trang phai nho hon hoac bang 100."
       },
       "sort": {
-        "invalid": "Định dạng sắp xếp không hợp lệ. Ví dụ: 'name,asc' hoặc 'price,desc'."
+        "invalid": "Dinh dang sap xep khong hop le. Vi du: 'name,asc' hoac 'price,desc'."
+      }
+    },
+    "export": {
+      "chunkSize": {
+        "min": "Kich thuoc chunk phai lon hon hoac bang 100.",
+        "max": "Kich thuoc chunk phai nho hon hoac bang 5000."
+      },
+      "fileFormat": {
+        "invalid": "Dinh dang file phai la CSV hoac PDF."
       }
     }
   }

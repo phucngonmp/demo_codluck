@@ -1,4 +1,9 @@
 {
+  "method": {
+    "not": {
+      "allowed": "method not allowed"
+    }
+  },
   "common": {
     "error": {
       "validation": "Validation failed."
@@ -20,6 +25,8 @@
     }
   },
   "security": {
+    "unauthorized": "Authentication is required to access this resource.",
+    "forbidden": "You do not have permission to access this resource.",
     "token": {
       "null": "Token is required.",
       "invalid": "Token is invalid."
@@ -36,6 +43,14 @@
     },
     "user": {
       "usernameNotFound": "Username does not exist."
+    }
+  },
+  "export": {
+    "job": {
+      "processing": "Export is being prepared. Please wait.",
+      "notFound": "Export job does not exist.",
+      "notReady": "Export file is not ready yet.",
+      "accessDenied": "You do not have permission to access this export job."
     }
   },
   "admin": {
@@ -85,6 +100,15 @@
       },
       "sort": {
         "invalid": "Sort format is invalid. Example: 'name,asc' or 'price,desc'."
+      }
+    },
+    "export": {
+      "chunkSize": {
+        "min": "Chunk size must be greater than or equal to 100.",
+        "max": "Chunk size must be less than or equal to 5000."
+      },
+      "fileFormat": {
+        "invalid": "File format must be either CSV or PDF."
       }
     }
   }

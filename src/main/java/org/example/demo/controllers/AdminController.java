@@ -18,7 +18,7 @@ public class AdminController {
     }
 
     @GetMapping
-    public ApiResponse<String> findAll() {
+    public ApiResponse<String> ping() {
         return ApiResponse.success(translator.get("admin.status.ready"));
     }
 }

@@ -10,6 +10,12 @@ public enum ErrorCode {
     USERNAME_NOT_FOUND(6, "auth.user.usernameNotFound"),
     PASSWORD_MISMATCH(7, "auth.register.passwordMismatch"),
     VALIDATIONS_FAILED(8, "common.error.validation"),
+    EXPORT_JOB_NOT_FOUND(9, "export.job.notFound"),
+    EXPORT_JOB_NOT_READY(10, "export.job.notReady"),
+    EXPORT_ACCESS_DENIED(11, "export.job.accessDenied"),
+    UNAUTHORIZED(401, "security.unauthorized"),
+    FORBIDDEN(403, "security.forbidden"),
+    METHOD_NOT_ALLOWED(405, "method.not.allowed"),
     ;
 
     private final int code;

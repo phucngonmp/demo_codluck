@@ -1,4 +1,4 @@
-package org.example.demo.services;
+package org.example.demo.services.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.demo.common.ErrorCode;
@@ -10,6 +10,7 @@ import org.example.demo.exception.ClientException;
 import org.example.demo.mappers.AccountMapper;
 import org.example.demo.repositories.AccountRepository;
 import org.example.demo.repositories.RoleRepository;
+import org.example.demo.services.IAccountService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class AccountService {
+public class AccountService implements IAccountService {
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
@@ -30,6 +31,7 @@ public class AccountService {
         this.accountMapper = accountMapper;
     }
 
+    @Override
     public AccountDTO createAccount(RegisterRequest registerRequest) {
         if(!registerRequest.password().equals(registerRequest.confirmPassword())) {
             throw new ClientException(ErrorCode.PASSWORD_MISMATCH);
@@ -49,6 +51,7 @@ public class AccountService {
         return accountMapper.toDTO(accountRepository.save(account));
     }
 
+    @Override
     public String resolveUsernameByIdentifier(String identifier) {
         if (identifier == null || identifier.isBlank()) {
             throw new ClientException(ErrorCode.BAD_CREDENTIALS);

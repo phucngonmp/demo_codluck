@@ -8,11 +8,14 @@ import org.example.demo.i18n.Translator;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentConversionNotSupportedException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.server.MethodNotAllowedException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -74,6 +77,12 @@ public class ExceptionHandling {
         );
 
         return ApiResponse.error(ex.getErrorCode(), translator.get(ex.getErrorCode().getMessageKey()));
+    }
+
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ApiResponse<?> handleMethodNotAllowed() {
+        return ApiResponse.error(ErrorCode.METHOD_NOT_ALLOWED, translator.get(ErrorCode.METHOD_NOT_ALLOWED.getMessageKey()));
     }
 
 
