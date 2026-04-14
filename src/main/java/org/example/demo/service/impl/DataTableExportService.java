@@ -60,8 +60,8 @@ public class DataTableExportService implements IDataTableExportService {
 
     @Override
     @Transactional
-    public DataTableExportJobResponse createExportJob(ExportFormat format, String keyword, String sort, String lang) {
-        long totalRecords = dataTableRepository.count(dataTableQuerySupport.buildKeywordSpecification(keyword));
+    public DataTableExportJobResponse createExportJob(ExportFormat format, String sort, String lang) {
+        long totalRecords = dataTableRepository.count();
         String jobId = UUID.randomUUID().toString();
         String fileExtension = format.name().toLowerCase();
         String fileName = "data-table-export-" + jobId + "." + fileExtension;
@@ -70,7 +70,7 @@ public class DataTableExportService implements IDataTableExportService {
                 .id(jobId)
                 .format(format)
                 .status(ExportJobStatus.PENDING)
-                .keyword(keyword)
+                .keyword(null)
                 .sort(sort)
                 .totalRecords(totalRecords)
                 .processedRecords(0)
@@ -155,7 +155,8 @@ public class DataTableExportService implements IDataTableExportService {
         try (PDDocument document = new PDDocument()) {
             PdfContext pdfContext = new PdfContext(document);
 
-            processChunks(exportJob, sort, chunk -> {
+            pdfContext.writeLine("Rendering engine | Browser | Platform(s) | Engine version | CSS grade");
+            boolean hasRecords = processChunks(exportJob, sort, chunk -> {
                 for (DataTable row : chunk) {
                     String line = String.join(" | ",
                             row.getRenderingEngine(),
@@ -168,24 +169,27 @@ public class DataTableExportService implements IDataTableExportService {
                 }
             });
 
+            if (!hasRecords) {
+                pdfContext.writeLine("No data found in data_tables.");
+            }
+
             pdfContext.close();
             document.save(exportPath.toFile());
         }
     }
 
-    private void processChunks(DataTableExportJob exportJob, Sort sort, ChunkConsumer chunkConsumer) throws IOException {
+    private boolean processChunks(DataTableExportJob exportJob, Sort sort, ChunkConsumer chunkConsumer) throws IOException {
         int pageNumber = 0;
+        boolean hasRecords = false;
         while (true) {
-            Page<DataTable> page = dataTableRepository.findAll(
-                    dataTableQuerySupport.buildKeywordSpecification(exportJob.getKeyword()),
-                    PageRequest.of(pageNumber, EXPORT_CHUNK_SIZE, sort)
-            );
+            Page<DataTable> page = dataTableRepository.findAll(PageRequest.of(pageNumber, EXPORT_CHUNK_SIZE, sort));
 
             List<DataTable> chunk = page.getContent();
             if (chunk.isEmpty()) {
                 break;
             }
 
+            hasRecords = true;
             chunkConsumer.accept(chunk);
             updateProgress(exportJob.getId(), chunk.size());
 
@@ -194,6 +198,7 @@ public class DataTableExportService implements IDataTableExportService {
             }
             pageNumber++;
         }
+        return hasRecords;
     }
 
     @Transactional

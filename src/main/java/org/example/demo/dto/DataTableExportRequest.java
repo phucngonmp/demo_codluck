@@ -9,6 +9,5 @@ import lombok.Setter;
 public class DataTableExportRequest {
     @Pattern(regexp = "CSV|PDF", flags = Pattern.Flag.CASE_INSENSITIVE, message = "validation.export.format")
     private String format = "CSV";
-    private String keyword;
     private String sort = "createdAt,desc";
 }

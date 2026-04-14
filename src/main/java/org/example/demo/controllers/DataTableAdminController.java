@@ -40,7 +40,6 @@ public class DataTableAdminController {
     ) {
         DataTableExportJobResponse job = exportService.createExportJob(
                 ExportFormat.valueOf(request.getFormat().toUpperCase()),
-                request.getKeyword(),
                 request.getSort(),
                 lang
         );

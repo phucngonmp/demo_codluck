@@ -5,7 +5,7 @@ import org.example.demo.entities.ExportFormat;
 import org.springframework.core.io.Resource;
 
 public interface IDataTableExportService {
-    DataTableExportJobResponse createExportJob(ExportFormat format, String keyword, String sort, String lang);
+    DataTableExportJobResponse createExportJob(ExportFormat format, String sort, String lang);
 
     DataTableExportJobResponse getExportJob(String jobId);
 
